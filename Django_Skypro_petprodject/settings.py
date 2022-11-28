@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'vacancies'
+    'vacancies'  # comments: Добавили app vacancies в настройки
 ]
 
 MIDDLEWARE = [

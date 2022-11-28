@@ -20,5 +20,5 @@ from vacancies import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hello/', views.hello)
+    path('hello/', views.hello)  # comments: Показали что будет работать по этому адресу
 ]
