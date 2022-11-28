@@ -20,5 +20,7 @@ from vacancies import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hello/', views.hello)  # comments: Показали что будет работать по этому адресу
+    path('hello/', views.hello),  # comments: Показали что будет работать по этому адресу
+    path('vacancy/', views.VacancyView.as_view()),  # специальный метод as.view() делает вызываемым класс (с передачей реквеста внутрь и упрощая задачу)
+    path('vacancy/<int:vacancy_id>/', views.VacancyDetail.as_view()),
 ]
