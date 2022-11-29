@@ -16,7 +16,7 @@ def hello(request):
 @method_decorator(csrf_exempt, name='dispatch')  # Таким образом мы можем обвернуть целый класс в декоратор csrf_exempt
 class VacancyView(View):
 
-    @staticmethod
+
     def get(self, request):  # request - все данные полученные от пользователя и собранные в красивый класс
         if request.method == 'GET':
             vacancies = Vacancy.objects.all()  # Формально objects это менеджер, но пока можно сказать это ORM - т.е. общение с БД
@@ -30,25 +30,28 @@ class VacancyView(View):
                 response.append(
                     {
                         'id': vacancy.id,
-                        'text': vacancy.text
+                        'text': vacancy.text,
+                        'description': vacancy.description
                     }
                 )
             return JsonResponse(response, safe=False, json_dumps_params={
                 'ensure_ascii': False})  # Второй аргумент, там не словарь, но оно может быть Json третий - можно передать параметры дампа
 
-    @staticmethod
+
     def post(self, request):
         vacansy_data = json.loads(
             request.body)  # Вытаскиваем данные для сохранения из тела запроса POST и приводим в вид словаря для дальнейшей работы
         vacancy = Vacancy()  # Создали объект класса модели
         vacancy.text = vacansy_data['text']
+        vacancy.description = vacansy_data['description']
 
         vacancy.save()  # Сохраняем данные. Метод сейв вызовет запрос на INSERT в БД
 
         return JsonResponse(
             {
                 'id': vacancy.id,
-                'text': vacancy.text
+                'text': vacancy.text,
+                'description': vacancy.description
             }
         )
 

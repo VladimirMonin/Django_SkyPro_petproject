@@ -11,8 +11,10 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 # Копирует все файлы из нашего локального проекта в контейнер
 COPY . .
-# Выполняет миграции и накатывает их
-CMD ["python", "manage.py", "makemigrations"]
-CMD ["python", "manage.py", "migrate"]
+# Выполняет миграции и накатывает их (это так не работает, увы)
+#CMD ["python", "manage.py", "makemigrations"]
+#CMD ["python", "manage.py", "migrate"]
+# Запускает скрипт в файле entrypoint.sh - который проведет миграции
+ENTRYPOINT ["bash", "entrypoint.sh"]
 # Запускает проект Django на порт 8000
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
