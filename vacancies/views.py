@@ -31,7 +31,8 @@ class VacancyView(View):
                     {
                         'id': vacancy.id,
                         'text': vacancy.text,
-                        'description': vacancy.description
+                        'slug': vacancy.slug,
+                        'status': vacancy.status
                     }
                 )
             return JsonResponse(response, safe=False, json_dumps_params={
@@ -43,7 +44,8 @@ class VacancyView(View):
             request.body)  # Вытаскиваем данные для сохранения из тела запроса POST и приводим в вид словаря для дальнейшей работы
         vacancy = Vacancy()  # Создали объект класса модели
         vacancy.text = vacansy_data['text']
-        vacancy.description = vacansy_data['description']
+        vacancy.slug = vacansy_data['slug']
+        vacancy.status = vacansy_data['status']
 
         vacancy.save()  # Сохраняем данные. Метод сейв вызовет запрос на INSERT в БД
 
@@ -51,7 +53,9 @@ class VacancyView(View):
             {
                 'id': vacancy.id,
                 'text': vacancy.text,
-                'description': vacancy.description
+                'slug': vacancy.slug,
+                'status': vacancy.status
+
             }
         )
 
@@ -65,6 +69,8 @@ class VacancyDetail(DetailView):  # Специализированный кла�
         return JsonResponse(
             {
                 'id': vacancy.id,
-                'text': vacancy.text
+                'text': vacancy.text,
+                'slug': vacancy.slug,
+                'status': vacancy.status
             }
             , safe=False, json_dumps_params={'ensure_ascii': False})

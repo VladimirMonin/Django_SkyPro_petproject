@@ -1,9 +1,49 @@
 version: '3.8'  # Указываем версию
 services:
-   full_django_app:
+  postgres:
+    image: postgres:13.0-alpine
+#    restart: always
+    extra_hosts:
+      - "postgres:127.0.0.0"
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+    networks:
+      - pet_project
+    volumes:
+      - pg_data_pet_project:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+
+  django_app:
        build: .
+       networks:
+         - pet_project
+       depends_on:
+         postgres:
+           condition: service_healthy
        volumes:
          - ./:/app
        command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
        ports:
            - '8000:8000'
+#       restart: always
+       links:
+         - postgres
+
+
+
+volumes:
+  pg_data_pet_project:
+
+networks:
+  pet_project:

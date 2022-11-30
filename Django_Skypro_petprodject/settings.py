@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%(bhx&u#s-_6$(bv53==z_mea%i$iy+1^502a+*&vf%cfhen9h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', '45.142.211.30']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', '45.142.211.30', '127.0.0.0']
 
 
 # Application definition
@@ -76,8 +76,13 @@ WSGI_APPLICATION = 'Django_Skypro_petprodject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',  # После точки указали движок БД
+        'NAME': 'postgres',  # Указали название БД
+        'USER': 'postgres',  # Указали юзера БД
+        'PASSWORD': 'postgres',  # Указали юзера БД
+        'HOST': '172.19.0.2',  # Указали хост тут может быть IP или УРЛ
+        'PORT': '5432',  # Указали порт
+
     }
 }
 
