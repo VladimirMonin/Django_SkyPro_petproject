@@ -26,7 +26,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "./deploy/docker-compose.yaml"  # Что мы будем копировать на сервер
+          source: "deploy/"  # Что мы будем копировать на сервер
           target: "django_skypro_petproject"  # Куда на сервере положить данные
           strip_components: 1  # Префексы deploy/ будут стерты и файлы лягут прямо в django_skypro_petproject
       - name: run docker-compose on server
