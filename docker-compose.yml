@@ -1,17 +1,17 @@
-version: '3.8'  # Указываем версию
+version: '3.9'  # Указываем версию
 services:
   postgres:
     image: postgres:13.0-alpine
 #    restart: always
-    extra_hosts:
-      - "postgres:127.0.0.0"
+#    extra_hosts:
+#      - "postgres:127.0.0.0"
     ports:
       - '5432:5432'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-      POSTGRES_HOST: 127.0.0.1
+#      POSTGRES_HOST: 127.0.0.1
       POSTGRES_PORT: 5432
     networks:
       - pet_project
