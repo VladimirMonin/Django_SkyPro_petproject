@@ -4,9 +4,11 @@ jobs:
   build_and_push:
     runs-on: ubuntu-latest
     steps:
-      - name: list dir
-        run: ls -lah
       - name: clone code
         uses: actions/checkout@v2
-      - name: list dir 2
+      - name: list dir
         run: ls -lah
+      - name: docker build image
+        run: docker build -t vmonin/django_skypro_petproject:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+      - name: check image
+        run: docker images
