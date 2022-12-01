@@ -1,7 +1,7 @@
 name: Build and deploy workflow
 on: [push]
 jobs:
-  build and push:
+  build_and_push:
     runs-on: ubuntu-latest
     steps:
       - name: list dir
@@ -10,4 +10,3 @@ jobs:
         uses: actions/checkout@v2
       - name: list dir 2
         run: ls -lah
-
