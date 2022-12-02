@@ -22,7 +22,7 @@ services:
   django_app:
     image: vmonin/django_skypro_petproject:version-1
     ports:
-      - 8000:8000
+      - "8000:8000"
     depends_on:
       postgres:
         condition: service_healthy

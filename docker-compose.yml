@@ -25,7 +25,7 @@ services:
 
 
   django_app:
-       build: ..
+       build: .
        networks:
          - pet_project
        depends_on:
@@ -47,4 +47,3 @@ volumes:
 
 networks:
   pet_project:
-
