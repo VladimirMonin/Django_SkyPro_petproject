@@ -11,7 +11,7 @@ from vacancies.models import Vacancy
 
 
 def hello(request):
-    return HttpResponse('Git Actions был побежден. 16-35 &#128513;')
+    return HttpResponse('Honey, I love you &#128536;')
 
 @method_decorator(csrf_exempt, name='dispatch')  # Таким образом мы можем обвернуть целый класс в декоратор csrf_exempt
 class VacancyView(View):
