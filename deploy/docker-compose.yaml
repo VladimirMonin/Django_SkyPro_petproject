@@ -22,7 +22,7 @@ services:
       - pet_project
 
   django_app:
-    image: vmonin/django_skypro_petproject:master-3618114933
+    image: vmonin/django_skypro_petproject:master-3618751020
     ports:
       - "8000:8000"
     depends_on:
@@ -36,7 +36,7 @@ services:
       - pet_project
 
   migrations:
-    image: vmonin/django_skypro_petproject:master-3618114933
+    image: vmonin/django_skypro_petproject:master-3618751020
     depends_on:
       postgres:
         condition: service_healthy
