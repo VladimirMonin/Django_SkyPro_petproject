@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_push
     steps:
+      - name: clone code
+        uses: actions/checkout@v2
       - name: clone files to server
         uses: appleboy/scp-action@v0.0.10
         with:  # Пробрасываем параметры
