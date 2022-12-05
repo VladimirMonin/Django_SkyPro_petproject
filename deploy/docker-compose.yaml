@@ -20,7 +20,7 @@ services:
       retries: 3
 
   django_app:
-    image: vmonin/django_skypro_petproject:version-1
+    image: vmonin/django_skypro_petproject:master-3617791136
     ports:
       - "8000:8000"
     depends_on:
@@ -28,10 +28,10 @@ services:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
-    command: [ "python", "manage.py", "runserver" ]
+    command: [ "python", "manage.py", "runserver", "45.142.211.30:8000" ]
 
   migrations:
-    image: vmonin/django_skypro_petproject:version-1
+    image: vmonin/django_skypro_petproject:master-3617791136
     depends_on:
       postgres:
         condition: service_healthy
