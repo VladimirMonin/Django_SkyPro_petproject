@@ -11,11 +11,11 @@ from vacancies.models import Vacancy
 
 
 def hello(request):
-    return HttpResponse('Honey, I love you &#128536;')
+    return HttpResponse('Это pet prodject для изучения Django в SkyPro')
+
 
 @method_decorator(csrf_exempt, name='dispatch')  # Таким образом мы можем обвернуть целый класс в декоратор csrf_exempt
 class VacancyView(View):
-
 
     def get(self, request):  # request - все данные полученные от пользователя и собранные в красивый класс
         if request.method == 'GET':
@@ -37,7 +37,6 @@ class VacancyView(View):
                 )
             return JsonResponse(response, safe=False, json_dumps_params={
                 'ensure_ascii': False})  # Второй аргумент, там не словарь, но оно может быть Json третий - можно передать параметры дампа
-
 
     def post(self, request):
         vacansy_data = json.loads(
