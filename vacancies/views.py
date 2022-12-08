@@ -17,25 +17,25 @@ def hello(request):
 class VacancyView(View):
 
     def get(self, request):  # request - все данные полученные от пользователя и собранные в красивый класс
-        if request.method == 'GET':
-            vacancies = Vacancy.objects.all()  # Формально objects это менеджер, но пока можно сказать это ORM - т.е. общение с БД
+        vacancies = Vacancy.objects.all()  # Формально objects это менеджер, но пока можно сказать это ORM - т.е. общение с БД
 
-            # search_text = request.GET['text']  # Если был передан query параметр text для поиска
-            search_text = request.GET.get('text', None)  # Чтобы вернул None если ничего не найдет
-            if search_text:
-                vacancies = vacancies.filter(text=search_text)  # производим поиск по БД
-            response = []
-            for vacancy in vacancies:
-                response.append(
-                    {
-                        'id': vacancy.id,
-                        'text': vacancy.text,
-                        'slug': vacancy.slug,
-                        'status': vacancy.status
-                    }
-                )
-            return JsonResponse(response, safe=False, json_dumps_params={
-                'ensure_ascii': False})  # Второй аргумент, там не словарь, но оно может быть Json третий - можно передать параметры дампа
+        # search_text = request.GET['text']  # Если был передан query параметр text для поиска
+        search_text = request.GET.get('text', None)  # Чтобы вернул None если
+        # request не содержит ключа text
+        if search_text:
+            vacancies = vacancies.filter(text=search_text)  # производим поиск по БД
+        response = []
+        for vacancy in vacancies:
+            response.append(
+                {
+                    'id': vacancy.id,
+                    'text': vacancy.text,
+                    'slug': vacancy.slug,
+                    'status': vacancy.status
+                }
+            )
+        return JsonResponse(response, safe=False, json_dumps_params={
+            'ensure_ascii': False})  # Второй аргумент, там не словарь, но оно может быть Json третий - можно передать параметры дампа
 
     def post(self, request):
         vacansy_data = json.loads(
