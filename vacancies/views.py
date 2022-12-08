@@ -11,10 +11,7 @@ from vacancies.models import Vacancy
 
 
 def hello(request):
-    return HttpResponse('Это pet prodject для изучения Django в SkyPro', safe=False, json_dumps_params={
-        'ensure_ascii': True
-    })  # safe=False - если мы например хотим передать не словарь а список - говорим что не надо проверять подходит ли в Json
-
+    return HttpResponse('Это pet prodject для изучения Django в SkyPro')
 
 @method_decorator(csrf_exempt, name='dispatch')  # Таким образом мы можем обвернуть целый класс в декоратор csrf_exempt
 class VacancyView(View):
@@ -61,7 +58,7 @@ class VacancyView(View):
         )
 
 
-class VacancyDetail(DetailView):  # Специализированный класс для детального отображения любого элемента
+class VacancyDetailView(DetailView):  # Специализированный класс для детального отображения любого элемента
     model = Vacancy  # Обязательный атрибут клсса DetailView - модель которую он детализирует
 
     def get(self, request, *args, **kwargs):
