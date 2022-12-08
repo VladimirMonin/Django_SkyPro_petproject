@@ -11,7 +11,9 @@ from vacancies.models import Vacancy
 
 
 def hello(request):
-    return HttpResponse('Это pet prodject для изучения Django в SkyPro')
+    return HttpResponse('Это pet prodject для изучения Django в SkyPro', safe=False, json_dumps_params={
+        'ensure_ascii': True
+    })  # safe=False - если мы например хотим передать не словарь а список - говорим что не надо проверять подходит ли в Json
 
 
 @method_decorator(csrf_exempt, name='dispatch')  # Таким образом мы можем обвернуть целый класс в декоратор csrf_exempt
