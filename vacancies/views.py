@@ -73,7 +73,7 @@ class VacancyCreateView(CreateView):
             text=vacansy_data['text'],
             slug=vacansy_data['slug'],
             status=vacansy_data['status'],
-            user_id=vacansy_data['user_id'],
+            # id=vacansy_data['user_id'],
 
         )
 
