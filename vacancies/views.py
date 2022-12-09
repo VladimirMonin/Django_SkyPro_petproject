@@ -31,7 +31,8 @@ class VacancyView(View):
                     'id': vacancy.id,
                     'text': vacancy.text,
                     'slug': vacancy.slug,
-                    'status': vacancy.status
+                    'status': vacancy.status,
+                    'created': vacancy.created
                 }
             )
         return JsonResponse(response, safe=False, json_dumps_params={
@@ -52,14 +53,15 @@ class VacancyView(View):
                 'id': vacancy.id,
                 'text': vacancy.text,
                 'slug': vacancy.slug,
-                'status': vacancy.status
+                'status': vacancy.status,
+                'created': vacancy.created
 
             }
         )
 
 
 class VacancyDetailView(DetailView):  # Специализированный класс для детального отображения любого элемента
-    model = Vacancy  # Обязательный атрибут клсса DetailView - модель которую он детализирует
+    model = Vacancy  # Обязательный атрибут класса DetailView - модель которую он детализирует
 
     def get(self, request, *args, **kwargs):
         vacancy = self.get_object()  # Встроенный метод который вернет наш элемент
