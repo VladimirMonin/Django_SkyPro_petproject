@@ -13,6 +13,7 @@ from vacancies.models import Vacancy
 def hello(request):
     return HttpResponse('Это pet prodject для изучения Django в SkyPro')
 
+
 @method_decorator(csrf_exempt, name='dispatch')  # Таким образом мы можем обвернуть целый класс в декоратор csrf_exempt
 class VacancyView(View):
 
@@ -33,7 +34,7 @@ class VacancyView(View):
                     'slug': vacancy.slug,
                     'status': vacancy.status,
                     'created': vacancy.created,
-                'user': vacancy.user
+                    'user': vacancy.user
                 }
             )
         return JsonResponse(response, safe=False, json_dumps_params={
@@ -59,6 +60,7 @@ class VacancyView(View):
                 'user': vacancy.user
 
             }
+            , safe=False, json_dumps_params={'ensure_ascii': False}
         )
 
 
