@@ -25,7 +25,7 @@ class Vacancy(models.Model):
     created = models.DateField(auto_now_add=True)  # Поставь текущее время на момент создания ;)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True,
                              blank=True)  # Внешний ключ принимает название модели с которой связываемся. Обязательный атрибут on_delete - если удаляем пользователя вероятно хотим удалить все его вакансии. Так же мы не прописали ID - они будут созданы за нас. Поле может быть null
-    skills = models.ManyToManyField(Skill)  # Добавили связь многие ко многим. Джанго сделает всё сам
+    skills = models.ManyToManyField(Skill)  # Добавили связь многие ко многим. Джанго сделает всё сам. Кстати, это не поле а связь
 
     def __str__(self):
         return self.text  # То что будет отображаться в заголовках админки
