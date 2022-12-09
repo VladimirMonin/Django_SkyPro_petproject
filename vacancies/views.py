@@ -69,6 +69,7 @@ class VacancyDetailView(DetailView):  # Специализированный к�
                 'id': vacancy.id,
                 'text': vacancy.text,
                 'slug': vacancy.slug,
-                'status': vacancy.status
+                'status': vacancy.status,
+                'created': vacancy.created
             }
             , safe=False, json_dumps_params={'ensure_ascii': False})

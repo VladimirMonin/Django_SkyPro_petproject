@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: clone code
         uses: actions/checkout@v2
-      - name: render_config
+      - name: render_config  # тут происходит рендер конфига, и переменные секретов заменяются на реальные данные
         run: |
           mkdir deploy
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml

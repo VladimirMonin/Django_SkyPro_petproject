@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%(bhx&u#s-_6$(bv53==z_mea%i$iy+1^502a+*&vf%cfhen9h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '45.142.211.30']
+ALLOWED_HOSTS = ['0.0.0.0', '45.142.211.30']  # адрес сервера на котором будет разворачиваться приложение
 
 
 # Application definition
@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'postgres',  # Указали название БД
         'USER': 'postgres',  # Указали юзера БД
         'PASSWORD': 'postgres',  # Указали юзера БД
-        'HOST': 'postgres',  # Указали хост тут может быть IP или УРЛ
+        'HOST': 'postgres',  # # Указали хост тут может быть IP или УРЛ. Я указал DNS имя контейнера с постгрой в сети докера
         'PORT': '5432',  # Указали порт
 
     }
