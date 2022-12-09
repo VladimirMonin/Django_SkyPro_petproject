@@ -5,6 +5,10 @@ from django.db import models
 class Skill(models.Model):
     name = models.CharField(max_length=25)
 
+    class Meta:
+        verbose_name = 'Навык'
+        verbose_name_plural = 'Навыки'
+
     def __str__(self):
         return self.name  # То что будет отображаться в заголовках админки
 
@@ -27,5 +31,8 @@ class Vacancy(models.Model):
                              blank=True)  # Внешний ключ принимает название модели с которой связываемся. Обязательный атрибут on_delete - если удаляем пользователя вероятно хотим удалить все его вакансии. Так же мы не прописали ID - они будут созданы за нас. Поле может быть null
     skills = models.ManyToManyField(Skill)  # Добавили связь многие ко многим. Джанго сделает всё сам. Кстати, это не поле а связь
 
+    class Meta:
+        verbose_name = 'Вакансия'
+        verbose_name_plural = 'Вакансии'
     def __str__(self):
         return self.text  # То что будет отображаться в заголовках админки
