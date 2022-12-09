@@ -32,7 +32,8 @@ class VacancyView(View):
                     'text': vacancy.text,
                     'slug': vacancy.slug,
                     'status': vacancy.status,
-                    'created': vacancy.created
+                    'created': vacancy.created,
+                'user': vacancy.user
                 }
             )
         return JsonResponse(response, safe=False, json_dumps_params={
@@ -54,7 +55,8 @@ class VacancyView(View):
                 'text': vacancy.text,
                 'slug': vacancy.slug,
                 'status': vacancy.status,
-                'created': vacancy.created
+                'created': vacancy.created,
+                'user': vacancy.user
 
             }
         )
@@ -72,6 +74,7 @@ class VacancyDetailView(DetailView):  # Специализированный к�
                 'text': vacancy.text,
                 'slug': vacancy.slug,
                 'status': vacancy.status,
-                'created': vacancy.created
+                'created': vacancy.created,
+                'user': vacancy.user
             }
             , safe=False, json_dumps_params={'ensure_ascii': False})
