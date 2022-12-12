@@ -69,7 +69,7 @@ class VacancyCreateView(CreateView):
     def post(self, request, *args, **kwargs):
         vacansy_data = json.loads(
             request.body)  # Вытаскиваем данные для сохранения из тела запроса POST и приводим в вид словаря для дальнейшей работы
-        vacancy = Vacancy.objects.create( # Вызывает save автоматически
+        vacancy = Vacancy.objects.create(  # Вызывает save автоматически
             text=vacansy_data['text'],
             slug=vacansy_data['slug'],
             status=vacansy_data['status'],
@@ -90,6 +90,7 @@ class VacancyCreateView(CreateView):
             , safe=False, json_dumps_params={'ensure_ascii': False}
         )
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class VacancyUpdateView(UpdateView):
     model = Vacancy
@@ -109,7 +110,6 @@ class VacancyUpdateView(UpdateView):
 
         self.object.save()  # Тут он не сохраняется автоматом - поэтому делаем это вручную
 
-
         return JsonResponse(
             {
                 'id': self.object.id,
@@ -123,6 +123,7 @@ class VacancyUpdateView(UpdateView):
             , safe=False, json_dumps_params={'ensure_ascii': False}
         )
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class VacancyDeleteView(DeleteView):
     model = Vacancy
@@ -131,4 +132,4 @@ class VacancyDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         super().delete(request, *args, **kwargs)
 
-        return JsonResponse({"status":"ok"}, status=200)
+        return JsonResponse({"status": "ok"}, status=200)
