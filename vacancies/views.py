@@ -7,7 +7,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
-from vacancies.models import Vacancy
+from vacancies.models import Vacancy, Skill
 
 
 def hello(request):
@@ -97,7 +97,7 @@ class VacancyUpdateView(UpdateView):
     fields = ['status', 'slug', 'skills',
               'text']  # Копия с CreateView, но тут мы не будем редактировать пользователя и дату создания
 
-    def post(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
 
         vacansy_data = json.loads(
@@ -106,6 +106,14 @@ class VacancyUpdateView(UpdateView):
         self.object.slug = vacansy_data['slug']
         self.object.status = vacansy_data['status']
         self.object.text = vacansy_data['text']
+
+        for skill in vacansy_data['skills']:
+            try:
+                skill_obj = Skill.objects.get(name=skill)
+            except Skill.DoesNotExist:
+                return JsonResponse({"error": "Skill not found"}, status=404)
+            self.object.skills.add(skill_obj)
+
 
         self.object.save()  # Тут он не сохраняется автоматом - поэтому делаем это вручную
 
