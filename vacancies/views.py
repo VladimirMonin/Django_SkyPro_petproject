@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
 from vacancies.models import Vacancy
 
@@ -15,7 +15,7 @@ def hello(request):
 
 
 @method_decorator(csrf_exempt, name='dispatch')  # Таким образом мы можем обвернуть целый класс в декоратор csrf_exempt
-class VacancyView(ListView):
+class VacancyListView(ListView):
     model = Vacancy  # Указываем модель с которой будем работать
 
     def get(self, request, *args,
@@ -69,7 +69,7 @@ class VacancyCreateView(CreateView):
     def post(self, request, *args, **kwargs):
         vacansy_data = json.loads(
             request.body)  # Вытаскиваем данные для сохранения из тела запроса POST и приводим в вид словаря для дальнейшей работы
-        vacancy = Vacancy.objects.create(
+        vacancy = Vacancy.objects.create( # Вызывает save автоматически
             text=vacansy_data['text'],
             slug=vacansy_data['slug'],
             status=vacansy_data['status'],
@@ -89,3 +89,46 @@ class VacancyCreateView(CreateView):
             }
             , safe=False, json_dumps_params={'ensure_ascii': False}
         )
+
+@method_decorator(csrf_exempt, name='dispatch')
+class VacancyUpdateView(UpdateView):
+    model = Vacancy
+    fields = ['status', 'slug', 'skills',
+              'text']  # Копия с CreateView, но тут мы не будем редактировать пользователя и дату создания
+
+    def post(self, request, *args, **kwargs):
+        super().post(request, *args, **kwargs)
+
+        vacansy_data = json.loads(
+            request.body)  # Вытаскиваем данные для сохранения из тела запроса POST и приводим в вид словаря для дальнейшей работы
+
+        self.object.slug = vacansy_data['slug']
+        self.object.status = vacansy_data['status']
+        self.object.skills = vacansy_data['skills']
+        self.object.text = vacansy_data['text']
+
+        self.object.save()  # Тут он не сохраняется автоматом - поэтому делаем это вручную
+
+
+        return JsonResponse(
+            {
+                'id': self.object.id,
+                'text': self.object.text,
+                'slug': self.object.slug,
+                'status': self.object.status,
+                'created': self.object.created,
+                'user': self.object.user
+
+            }
+            , safe=False, json_dumps_params={'ensure_ascii': False}
+        )
+
+@method_decorator(csrf_exempt, name='dispatch')
+class VacancyDeleteView(DeleteView):
+    model = Vacancy
+    success_url = '/'
+
+    def delete(self, request, *args, **kwargs):
+        super().delete(request, *args, **kwargs)
+
+        return JsonResponse({"status":"ok"}, status=200)
