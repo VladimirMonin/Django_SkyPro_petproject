@@ -107,7 +107,6 @@ class VacancyUpdateView(UpdateView):
         self.object.status = vacansy_data['status']
         self.object.text = vacansy_data['text']
 
-
         self.object.save()  # Тут он не сохраняется автоматом - поэтому делаем это вручную
 
         return JsonResponse(
@@ -120,7 +119,7 @@ class VacancyUpdateView(UpdateView):
                 'user': self.object.user
 
             }
-            ,json_dumps_params={'ensure_ascii': False}
+            , json_dumps_params={'ensure_ascii': False}
         )
 
 
