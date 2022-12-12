@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'vacancies'  # comments: Добавили app vacancies в настройки
-]
+    'vacancies',  # comments: Добавили app vacancies в настройки
+    'companies',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
