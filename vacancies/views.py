@@ -28,7 +28,6 @@ class VacancyListView(ListView):
                     'slug': vacancy.slug,
                     'status': vacancy.status,
                     'created': vacancy.created,
-                    'user': vacancy.user,
                     'skills': list(vacancy.skills.all().values_list("name", flat=True)),
                 }
             )
@@ -49,7 +48,6 @@ class VacancyDetailView(DetailView):  # Специализированный к�
                 'slug': vacancy.slug,
                 'status': vacancy.status,
                 'created': vacancy.created,
-                'user': vacancy.user,
                 'skills': list(vacancy.skills.all().values_list("name", flat=True)),
             }
             , safe=False, json_dumps_params={'ensure_ascii': False})
@@ -79,7 +77,6 @@ class VacancyCreateView(CreateView):
                 'slug': vacancy.slug,
                 'status': vacancy.status,
                 'created': vacancy.created,
-                'user': vacancy.user,
                 'skills': list(vacancy.skills.all().values_list("name", flat=True)),
 
             }
@@ -119,7 +116,6 @@ class VacancyUpdateView(UpdateView):
                 'slug': self.object.slug,
                 'status': self.object.status,
                 'created': self.object.created,
-                'user': self.object.user,
                 'skills': list(self.object.skills.all().values_list("name", flat=True)),  # это many to many поле которое ссылается на таблицу
                 # с ключами, просто так не выведешь. Мы делаем запрос в БД. Без этого никак. Берем скиллы, достаем все
                 # говорим что нам надо достать тоьлко имена (в плоском виде) и заворачиваем в список
