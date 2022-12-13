@@ -9,4 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', views.hello),  # comments: Показали что будет работать по этому адресу
     path('vacancy/', include('vacancies.urls')),  # добавили урлы из app vacancies
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # добавили сам урл (с константы настроек а потом адрес папки тоже константой)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # добавили сам урл (с константы настроек а потом адрес папки тоже константой) работает только в режиме разработчика и для этого нужна проверка
