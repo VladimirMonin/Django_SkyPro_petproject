@@ -12,7 +12,7 @@ class CompanyImageView(UpdateView):
     model = Company
     fields = ['name', 'logo']
 
-    def patch(self, *args, **kwargs):
+    def post(self, *args, **kwargs):
         self.object = self.get_object()
         self.object.logo = request.FILES['logo']
         self.object.save()
@@ -20,5 +20,5 @@ class CompanyImageView(UpdateView):
         return JsonResponse({
             'id': self.object.id,
             'name': self.object.name,
-            'logo': self.object.logo,
+            'logo': self.object.logo.url if self.object.logo else None,
         })
