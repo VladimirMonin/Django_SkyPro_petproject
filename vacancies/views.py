@@ -22,10 +22,6 @@ class VacancyListView(ListView):
             **kwargs):  # request - все данные полученные от пользователя и собранные в красивый класс
         super().get(request, *args, **kwargs)  # После этого появится objects.list self
 
-        search_text = request.GET.get('text', None)  # Чтобы вернул None если
-        # request не содержит ключа text
-        if search_text:
-            vacancies = self.object_list.filter(text=search_text)  # производим поиск по БД
         response = []
         for vacancy in self.object_list:
             response.append(
