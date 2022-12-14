@@ -1,9 +1,12 @@
 import json
+
+from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
+from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
 
 
@@ -17,11 +20,17 @@ class VacancyListView(ListView):
 
     def get(self, request, *args,
             **kwargs):  # request - все данные полученные от пользователя и собранные в красивый класс
-        super().get(request, *args, **kwargs)  # После этого появится objects.list self
+        super().get(request, *args, **kwargs)  # После этого появится self.object_list
 
-        response = []
-        for vacancy in self.object_list:
-            response.append(
+        self.object_list = self.object_list.order_by('id') # Делаем сортировку по ID
+
+        paginator = Paginator(self.object_list, settings.TOTAL_ON_PAGE)  # Пагинатор встроен в Джанго.
+        page_number = request.GET.get('page')  # Достаём номер страницы из запроса
+        page_object = paginator.get_page(page_number)  # Передаем в пагинатор и получаем страницу
+
+        vacancies = []
+        for vacancy in page_object:
+            vacancies.append(
                 {
                     'id': vacancy.id,
                     'text': vacancy.text,
@@ -31,6 +40,12 @@ class VacancyListView(ListView):
                     'skills': list(vacancy.skills.all().values_list("name", flat=True)),
                 }
             )
+
+        response = {  # Чтобы наш фронт мог отобразить всю пагинанацию
+            'items': vacancies,  # Вакансии на странице
+            'num_pages': paginator.num_pages,  # Посчитаем сколько всего страниц
+            'total': paginator.count  # Посчитаем сколько всего запписей
+        }
         return JsonResponse(response, safe=False, json_dumps_params={
             'ensure_ascii': False})  # Второй аргумент, там не словарь, но оно может быть Json третий - можно передать параметры дампа
 

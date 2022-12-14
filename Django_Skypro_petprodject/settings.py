@@ -131,3 +131,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'  # Путь относительно нашего сайта - по которому мы будем отдавать все наши картинки
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # То где все файлы которые загружают юзеры. Берем корневую директорию (соединяем пути для нашей ОС)
+
+TOTAL_ON_PAGE = 10  # константа для пагинации
