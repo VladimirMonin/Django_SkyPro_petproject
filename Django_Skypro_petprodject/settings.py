@@ -133,3 +133,20 @@ MEDIA_URL = '/media/'  # Путь относительно нашего сайт
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # То где все файлы которые загружают юзеры. Берем корневую директорию (соединяем пути для нашей ОС)
 
 TOTAL_ON_PAGE = 10  # константа для пагинации
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+    }
+}

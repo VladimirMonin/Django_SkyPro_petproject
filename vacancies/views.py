@@ -25,7 +25,7 @@ class VacancyListView(ListView):
             **kwargs):  # request - все данные полученные от пользователя и собранные в красивый класс
         super().get(request, *args, **kwargs)  # После этого появится self.object_list
 
-        self.object_list = self.object_list.order_by('id') # Делаем сортировку по ID
+        self.object_list = self.object_list.select_related('user').prefetch_related('skills').order_by('id') # Делаем сортировку по ID (а так же джоин)
 
         paginator = Paginator(self.object_list, settings.TOTAL_ON_PAGE)  # Пагинатор встроен в Джанго.
         page_number = request.GET.get('page')  # Достаём номер страницы из запроса
@@ -36,11 +36,12 @@ class VacancyListView(ListView):
             vacancies.append(
                 {
                     'id': vacancy.id,
+                    'username': vacancy.user.username,
                     'text': vacancy.text,
                     'slug': vacancy.slug,
                     'status': vacancy.status,
                     'created': vacancy.created,
-                    'skills': list(vacancy.skills.all().values_list("name", flat=True)),
+                    'skills': list(map(str, vacancy.skills.all()))  # Переписал тут. Чтобы не было повторных запросов SQL. Т.к. все данные вытащит запрос выше
                 }
             )
 
