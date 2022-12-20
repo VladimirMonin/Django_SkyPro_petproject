@@ -25,7 +25,8 @@ class VacancyListView(ListView):
             **kwargs):  # request - все данные полученные от пользователя и собранные в красивый класс
         super().get(request, *args, **kwargs)  # После этого появится self.object_list
 
-        self.object_list = self.object_list.select_related('user').prefetch_related('skills').order_by('id') # Делаем сортировку по ID (а так же джоин)
+        self.object_list = self.object_list.select_related('user').prefetch_related('skills').order_by(
+            'id')  # Делаем сортировку по ID (а так же джоин)
 
         paginator = Paginator(self.object_list, settings.TOTAL_ON_PAGE)  # Пагинатор встроен в Джанго.
         page_number = request.GET.get('page')  # Достаём номер страницы из запроса
@@ -41,7 +42,8 @@ class VacancyListView(ListView):
                     'slug': vacancy.slug,
                     'status': vacancy.status,
                     'created': vacancy.created,
-                    'skills': list(map(str, vacancy.skills.all()))  # Переписал тут. Чтобы не было повторных запросов SQL. Т.к. все данные вытащит запрос выше
+                    'skills': list(map(str, vacancy.skills.all()))
+                    # Переписал тут. Чтобы не было повторных запросов SQL. Т.к. все данные вытащит запрос выше
                 }
             )
 
@@ -89,6 +91,16 @@ class VacancyCreateView(CreateView):
 
         )
 
+        for skill in vacansy_data['skills']:
+            skill_obj, created = Skill.objects.get_or_create(  # get_or_create -
+                name=skill,
+                defaults={
+                    "is_active": True
+                }
+            )
+            vacancy.skills.add(skill_obj)
+        vacancy.save()
+
         return JsonResponse(
             {
                 'id': vacancy.id,
@@ -135,7 +147,8 @@ class VacancyUpdateView(UpdateView):
                 'slug': self.object.slug,
                 'status': self.object.status,
                 'created': self.object.created,
-                'skills': list(self.object.skills.all().values_list("name", flat=True)),  # это many to many поле которое ссылается на таблицу
+                'skills': list(self.object.skills.all().values_list("name", flat=True)),
+                # это many to many поле которое ссылается на таблицу
                 # с ключами, просто так не выведешь. Мы делаем запрос в БД. Без этого никак. Берем скиллы, достаем все
                 # говорим что нам надо достать тоьлко имена (в плоском виде) и заворачиваем в список
 
@@ -154,10 +167,12 @@ class VacancyDeleteView(DeleteView):
 
         return JsonResponse({"status": "ok"}, status=200)
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class UserVacancyDetailView(View):
     def get(self, request):
-        user_qs = User.objects.annotate(vacancies=Count('vacancy')).order_by('id') # Этот метод добавляет к нашей записи доп. колонку в которую ложет данные что он сделал - например это значение функции (посчтитать, макс или мин) далее я делаю группировку по возрастанию ID
+        user_qs = User.objects.annotate(vacancies=Count('vacancy')).order_by(
+            'id')  # Этот метод добавляет к нашей записи доп. колонку в которую ложет данные что он сделал - например это значение функции (посчтитать, макс или мин) далее я делаю группировку по возрастанию ID
 
         paginator = Paginator(user_qs, settings.TOTAL_ON_PAGE)  # Пагинатор встроен в Джанго.
         page_number = request.GET.get('page')  # Достаём номер страницы из запроса
@@ -176,7 +191,8 @@ class UserVacancyDetailView(View):
             'items': users,
             'num_pages': paginator.num_pages,  # Посчитаем сколько всего страниц у нас будет
             'total': paginator.count,  # Посчитаем сколько всего юзеров
-            'avg': user_qs.aggregate(avg=Avg('vacancies'))['avg']  # aggregate - терминальная функция, после неё уже нельзя использовать гурппировки. Тут мы говорим сделай Avg, положи в ключ avg и последний список после скобок (чтобы было плоско)
+            'avg': user_qs.aggregate(avg=Avg('vacancies'))['avg']
+            # aggregate - терминальная функция, после неё уже нельзя использовать гурппировки. Тут мы говорим сделай Avg, положи в ключ avg и последний список после скобок (чтобы было плоско)
         }
 
         return JsonResponse(response, safe=False, json_dumps_params={
