@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Count, Avg
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -88,7 +89,7 @@ class VacancyCreateView(CreateView):
             slug=vacansy_data['slug'],
             status=vacansy_data['status'],
         )
-
+        vacancy.user = get_object_or_404(User, pk=vacansy_data['user_id'])  # Проверяем есть ли юзер. Если нет - 404
 
 
         for skill in vacansy_data['skills']:
@@ -109,6 +110,7 @@ class VacancyCreateView(CreateView):
                 'status': vacancy.status,
                 'created': vacancy.created,
                 'skills': list(vacancy.skills.all().values_list("name", flat=True)),
+                'user': vacancy.user_id
 
             }
             , safe=False, json_dumps_params={'ensure_ascii': False}
