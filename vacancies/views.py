@@ -37,7 +37,7 @@ class VacancyListView(ListView):
             vacancies.append(
                 {
                     'id': vacancy.id,
-                    'username': vacancy.user.username,
+                    # 'username': vacancy.user.username,
                     'text': vacancy.text,
                     'slug': vacancy.slug,
                     'status': vacancy.status,
@@ -87,9 +87,9 @@ class VacancyCreateView(CreateView):
             text=vacansy_data['text'],
             slug=vacansy_data['slug'],
             status=vacansy_data['status'],
-            # id=vacansy_data['user_id'],
-
         )
+
+
 
         for skill in vacansy_data['skills']:
             skill_obj, created = Skill.objects.get_or_create(  # get_or_create -
