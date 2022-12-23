@@ -1,6 +1,6 @@
 from rest_framework import serializers  # импорт подтягивается плохо - можно делать вручную
 
-from vacancies.models import Vacancy
+from vacancies.models import Vacancy, Skill
 
 
 class VacancySerializer(serializers.ModelSerializer):
@@ -33,6 +33,16 @@ class VacancyDetailSerializer(serializers.ModelSerializer):
 
 class VacancyCreateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)  # Добавили поле ID (объявления) - т.к. оно не передается при создании - указали что required=False
+    skills = serializers.SlugRelatedField(
+        required=False,
+        many=True,
+        queryset=Skill.objects.all(),  # Когда мы перестаем использовать только для чтения - нужно давать queryset
+        slug_field='name'
+    )
     class Meta:
         model = Vacancy
-        exclude = ['skills']  # Исключили эти поля - они не идут на вход при создании вакансии
+        fields = '__all__'  # Исключили эти поля - они не идут на вход при создании вакансии
+
+    def is_valid(self, raise_exeption=False):
+        self._skills = self.initial_data.pop('skills')
+        return super().is_valid(raise_exeption=raise_exeption)

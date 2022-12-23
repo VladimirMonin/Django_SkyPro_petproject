@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
@@ -31,25 +31,27 @@ class VacancyDetailView(RetrieveAPIView):  # Специализированны�
     serializer_class = VacancyDetailSerializer
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class VacancyCreateView(CreateView):
-    model = Vacancy
-    fields = ['user', 'status', 'created', 'slug', 'skills',
-              'text']  # Нужно для генерации формы. Её мы не будем использовать. Но т.к. это неотъемлимый атрибут джанго - приходится писать
 
-    def post(self, request, *args, **kwargs):
-        vacancy_data = VacancyCreateSerializer(data=json.loads(request.body)) # Из тела запроса в json - потом в объект Python
-        if vacancy_data.is_valid():  # Проверяем что все данные в нужных форматах и подходят
-            vacancy_data.save()  # Прямо из сериализатора сохраняем
-
-        else:
-            return JsonResponse(vacancy_data.errors)
-
-        return JsonResponse(
-            vacancy_data.data,
-            safe=False, json_dumps_params={'ensure_ascii': False}
-        )
-
+class VacancyCreateView(CreateAPIView):  # Тут не нужен csrf_exempt - т.к. оно заточено под работу как API
+    queryset = Vacancy.objects.all()
+    serializer_class = VacancyCreateSerializer
+    # model = Vacancy
+    # fields = ['user', 'status', 'created', 'slug', 'skills',
+    #           'text']  # Нужно для генерации формы. Её мы не будем использовать. Но т.к. это неотъемлимый атрибут джанго - приходится писать
+    #
+    # def post(self, request, *args, **kwargs):
+    #     vacancy_data = VacancyCreateSerializer(data=json.loads(request.body)) # Из тела запроса в json - потом в объект Python
+    #     if vacancy_data.is_valid():  # Проверяем что все данные в нужных форматах и подходят
+    #         vacancy_data.save()  # Прямо из сериализатора сохраняем
+    #
+    #     else:
+    #         return JsonResponse(vacancy_data.errors)
+    #
+    #     return JsonResponse(
+    #         vacancy_data.data,
+    #         safe=False, json_dumps_params={'ensure_ascii': False}
+    #     )
+    #
 
 @method_decorator(csrf_exempt, name='dispatch')
 class VacancyUpdateView(UpdateView):
