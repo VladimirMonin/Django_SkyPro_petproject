@@ -9,6 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from rest_framework.generics import ListAPIView
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
@@ -20,30 +21,9 @@ def hello(request):
 
 
 @method_decorator(csrf_exempt, name='dispatch')  # Таким образом мы можем обвернуть целый класс в декоратор csrf_exempt
-class VacancyListView(ListView):
-    model = Vacancy  # Указываем модель с которой будем работать
-
-    def get(self, request, *args,
-            **kwargs):  # request - все данные полученные от пользователя и собранные в красивый класс
-        super().get(request, *args, **kwargs)  # После этого появится self.object_list
-
-        self.object_list = self.object_list.select_related('user').prefetch_related('skills').order_by(
-            'id')  # Делаем сортировку по ID (а так же джоин)
-
-        paginator = Paginator(self.object_list, settings.TOTAL_ON_PAGE)  # Пагинатор встроен в Джанго.
-        page_number = request.GET.get('page')  # Достаём номер страницы из запроса
-        page_object = paginator.get_page(page_number)  # Передаем в пагинатор и получаем страницу
-
-        list(map(lambda x: setattr(x, 'username', x.user.username if x.user else None), page_object))
-
-        response = {  # Чтобы наш фронт мог отобразить всю пагинанацию
-            'items': VacancySerializer(page_object, many=True).data,
-            # Отправили объекты питона в серализатор - на выходе Json (data method) - many - потому что их много
-            'num_pages': paginator.num_pages,  # Посчитаем сколько всего страниц
-            'total': paginator.count  # Посчитаем сколько всего запписей
-        }
-        return JsonResponse(response, safe=False, json_dumps_params={
-            'ensure_ascii': False})  # Второй аргумент, там не словарь, но оно может быть Json третий - можно передать параметры дампа
+class VacancyListView(ListAPIView):
+    queryset = Vacancy.objects.all()  # это вместо указания модели
+    serializer_class = VacancySerializer
 
 
 class VacancyDetailView(DetailView):  # Специализированный класс для детального отображения любого элемента

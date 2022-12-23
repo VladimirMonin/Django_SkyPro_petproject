@@ -5,6 +5,7 @@ from django.db import models
 class Skill(models.Model):
     name = models.CharField(max_length=25)
     is_active = models.BooleanField(default=True)
+
     class Meta:
         verbose_name = 'Навык'
         verbose_name_plural = 'Навыки'
@@ -29,11 +30,18 @@ class Vacancy(models.Model):
     created = models.DateField(auto_now_add=True)  # Поставь текущее время на момент создания ;)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True,
                              blank=True)  # Внешний ключ принимает название модели с которой связываемся. Обязательный атрибут on_delete - если удаляем пользователя вероятно хотим удалить все его вакансии. Так же мы не прописали ID - они будут созданы за нас. Поле может быть null
-    skills = models.ManyToManyField(Skill)  # Добавили связь многие ко многим. Джанго сделает всё сам. Кстати, это не поле а связь
+    skills = models.ManyToManyField(
+        Skill)  # Добавили связь многие ко многим. Джанго сделает всё сам. Кстати, это не поле а связь
 
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
         # ordering = ['id']  # в списке колонки для сортировки
+
     def __str__(self):
         return self.text  # То что будет отображаться в заголовках админки
+
+#  Добавляем username через модель. Будет его вовзращать, иначе None
+    @property  # чтобы сделать его атрибутом модели
+    def username(self):
+        return self.user.username if self.user else None
