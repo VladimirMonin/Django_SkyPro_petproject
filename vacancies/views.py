@@ -12,7 +12,7 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView, D
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
-from vacancies.serializers import VacancySerializer
+from vacancies.serializers import VacancySerializer, VacancyDetailSerializer
 
 
 def hello(request):
@@ -65,16 +65,7 @@ class VacancyDetailView(DetailView):  # Специализированный к�
     def get(self, request, *args, **kwargs):
         vacancy = self.get_object()  # Встроенный метод который вернет наш элемент
 
-        return JsonResponse(
-            {
-                'id': vacancy.id,
-                'text': vacancy.text,
-                'slug': vacancy.slug,
-                'status': vacancy.status,
-                'created': vacancy.created,
-                'skills': list(vacancy.skills.all().values_list("name", flat=True)),
-            }
-            , safe=False, json_dumps_params={'ensure_ascii': False})
+        return JsonResponse(VacancyDetailSerializer(vacancy).data, safe=False)
 
 
 @method_decorator(csrf_exempt, name='dispatch')

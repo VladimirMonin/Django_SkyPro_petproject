@@ -10,3 +10,9 @@ class VacancySerializer(serializers.ModelSerializer):
         fields = ['id', 'text', 'slug', 'status', 'created', 'username']  # Поля (тут можно сделать исключения, или просто указать __all__
 
 
+class VacancyDetailSerializer(serializers.ModelSerializer):
+    user = serializers.CharField()  # username в модели нет - но мы можем добавить в сериализатор (а данные добавляются во вьюшке)
+
+    class Meta:
+        model = Vacancy  # Модель которую будем прогонять
+        fields = '__all__'
