@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
@@ -26,13 +26,9 @@ class VacancyListView(ListAPIView):
     serializer_class = VacancySerializer
 
 
-class VacancyDetailView(DetailView):  # Специализированный класс для детального отображения любого элемента
-    model = Vacancy  # Обязательный атрибут класса DetailView - модель которую он детализирует
-
-    def get(self, request, *args, **kwargs):
-        vacancy = self.get_object()  # Встроенный метод который вернет наш элемент
-
-        return JsonResponse(VacancyDetailSerializer(vacancy).data)
+class VacancyDetailView(RetrieveAPIView):  # Специализированный класс для детального отображения любого элемента
+    queryset = Vacancy.objects.all()
+    serializer_class = VacancyDetailSerializer
 
 
 @method_decorator(csrf_exempt, name='dispatch')
