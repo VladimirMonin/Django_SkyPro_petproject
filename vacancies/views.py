@@ -12,7 +12,7 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView, D
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
-from vacancies.serializers import VacancySerializer, VacancyDetailSerializer
+from vacancies.serializers import VacancySerializer, VacancyDetailSerializer, VacancyCreateSerializer
 
 
 def hello(request):
@@ -34,24 +34,11 @@ class VacancyListView(ListView):
         page_number = request.GET.get('page')  # Достаём номер страницы из запроса
         page_object = paginator.get_page(page_number)  # Передаем в пагинатор и получаем страницу
 
-        # vacancies = []
-        # for vacancy in page_object:
-        #     vacancies.append(
-        #         {
-        #             'id': vacancy.id,
-        #             # 'username': vacancy.user.username,
-        #             'text': vacancy.text,
-        #             'slug': vacancy.slug,
-        #             'status': vacancy.status,
-        #             'created': vacancy.created,
-        #             'skills': list(map(str, vacancy.skills.all()))
-        #             # Переписал тут. Чтобы не было повторных запросов SQL. Т.к. все данные вытащит запрос выше
-        #         }
-        #     )
         list(map(lambda x: setattr(x, 'username', x.user.username if x.user else None), page_object))
 
         response = {  # Чтобы наш фронт мог отобразить всю пагинанацию
-            'items': VacancySerializer(page_object, many=True).data,  # Отправили объекты питона в серализатор - на выходе Json (data method) - many - потому что их много
+            'items': VacancySerializer(page_object, many=True).data,
+            # Отправили объекты питона в серализатор - на выходе Json (data method) - many - потому что их много
             'num_pages': paginator.num_pages,  # Посчитаем сколько всего страниц
             'total': paginator.count  # Посчитаем сколько всего запписей
         }
@@ -75,38 +62,16 @@ class VacancyCreateView(CreateView):
               'text']  # Нужно для генерации формы. Её мы не будем использовать. Но т.к. это неотъемлимый атрибут джанго - приходится писать
 
     def post(self, request, *args, **kwargs):
-        vacansy_data = json.loads(
-            request.body)  # Вытаскиваем данные для сохранения из тела запроса POST и приводим в вид словаря для дальнейшей работы
-        vacancy = Vacancy.objects.create(  # Вызывает save автоматически
-            text=vacansy_data['text'],
-            slug=vacansy_data['slug'],
-            status=vacansy_data['status'],
-        )
-        vacancy.user = get_object_or_404(User, pk=vacansy_data['user_id'])  # Проверяем есть ли юзер. Если нет - 404
+        vacancy_data = VacancyCreateSerializer(data=json.loads(request.body)) # Из тела запроса в json - потом в объект Python
+        if vacancy_data.is_valid():  # Проверяем что все данные в нужных форматах и подходят
+            vacancy_data.save()  # Прямо из сериализатора сохраняем
 
-
-        for skill in vacansy_data['skills']:
-            skill_obj, created = Skill.objects.get_or_create(  # get_or_create -
-                name=skill,
-                defaults={
-                    "is_active": True
-                }
-            )
-            vacancy.skills.add(skill_obj)
-        vacancy.save()
+        else:
+            return JsonResponse(vacancy_data.errors)
 
         return JsonResponse(
-            {
-                'id': vacancy.id,
-                'text': vacancy.text,
-                'slug': vacancy.slug,
-                'status': vacancy.status,
-                'created': vacancy.created,
-                'skills': list(vacancy.skills.all().values_list("name", flat=True)),
-                'user': vacancy.user_id
-
-            }
-            , safe=False, json_dumps_params={'ensure_ascii': False}
+            vacancy_data.data,
+            safe=False, json_dumps_params={'ensure_ascii': False}
         )
 
 
@@ -119,14 +84,14 @@ class VacancyUpdateView(UpdateView):
     def patch(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
 
-        vacansy_data = json.loads(
+        vacancy_data = json.loads(
             request.body)  # Вытаскиваем данные для сохранения из тела запроса POST и приводим в вид словаря для дальнейшей работы
 
-        self.object.slug = vacansy_data['slug']
-        self.object.status = vacansy_data['status']
-        self.object.text = vacansy_data['text']
+        self.object.slug = vacancy_data['slug']
+        self.object.status = vacancy_data['status']
+        self.object.text = vacancy_data['text']
 
-        for skill in vacansy_data['skills']:
+        for skill in vacancy_data['skills']:
             try:
                 skill_obj = Skill.objects.get(name=skill)
             except Skill.DoesNotExist:

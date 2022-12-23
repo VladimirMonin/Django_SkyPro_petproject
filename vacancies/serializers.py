@@ -29,3 +29,9 @@ class VacancyDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vacancy  # Модель которую будем прогонять
         fields = '__all__'
+
+
+class VacancyCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vacancy
+        exclude = ['id', 'skills']  # Исключили эти поля - они не идут на вход при создании вакансии
