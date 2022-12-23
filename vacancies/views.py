@@ -48,6 +48,7 @@ class VacancyListView(ListView):
         #             # Переписал тут. Чтобы не было повторных запросов SQL. Т.к. все данные вытащит запрос выше
         #         }
         #     )
+        list(map(lambda x: setattr(x, 'username', x.user.username if x.user else None), page_object))
 
         response = {  # Чтобы наш фронт мог отобразить всю пагинанацию
             'items': VacancySerializer(page_object, many=True).data,  # Отправили объекты питона в серализатор - на выходе Json (data method) - many - потому что их много
