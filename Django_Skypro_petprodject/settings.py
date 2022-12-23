@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'vacancies',  # comments: Добавили app vacancies в настройки
+    'rest_framework',  # DRF надо добавить ДО самописных приложений
+    'vacancies',  # Добавили app vacancies в настройки
     'companies',
     ]
 
