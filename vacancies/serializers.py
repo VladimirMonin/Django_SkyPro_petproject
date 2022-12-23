@@ -20,6 +20,11 @@ class VacancySerializer(serializers.ModelSerializer):
 
 class VacancyDetailSerializer(serializers.ModelSerializer):
     user = serializers.CharField()  # если добавить сюда эту строку - будет подтягиваться Юзернейм!!!
+    skills = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='name'  # На какое поле модели skills мы будем ссылаться
+    )
 
     class Meta:
         model = Vacancy  # Модель которую будем прогонять
