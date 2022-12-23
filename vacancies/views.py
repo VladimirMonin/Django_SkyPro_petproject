@@ -12,6 +12,7 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView, D
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
+from vacancies.serializers import VacancySerializer
 
 
 def hello(request):
@@ -33,23 +34,23 @@ class VacancyListView(ListView):
         page_number = request.GET.get('page')  # Достаём номер страницы из запроса
         page_object = paginator.get_page(page_number)  # Передаем в пагинатор и получаем страницу
 
-        vacancies = []
-        for vacancy in page_object:
-            vacancies.append(
-                {
-                    'id': vacancy.id,
-                    # 'username': vacancy.user.username,
-                    'text': vacancy.text,
-                    'slug': vacancy.slug,
-                    'status': vacancy.status,
-                    'created': vacancy.created,
-                    'skills': list(map(str, vacancy.skills.all()))
-                    # Переписал тут. Чтобы не было повторных запросов SQL. Т.к. все данные вытащит запрос выше
-                }
-            )
+        # vacancies = []
+        # for vacancy in page_object:
+        #     vacancies.append(
+        #         {
+        #             'id': vacancy.id,
+        #             # 'username': vacancy.user.username,
+        #             'text': vacancy.text,
+        #             'slug': vacancy.slug,
+        #             'status': vacancy.status,
+        #             'created': vacancy.created,
+        #             'skills': list(map(str, vacancy.skills.all()))
+        #             # Переписал тут. Чтобы не было повторных запросов SQL. Т.к. все данные вытащит запрос выше
+        #         }
+        #     )
 
         response = {  # Чтобы наш фронт мог отобразить всю пагинанацию
-            'items': vacancies,  # Вакансии на странице
+            'items': VacancySerializer(page_object, many=True).data,  # Отправили объекты питона в серализатор - на выходе Json (data method) - many - потому что их много
             'num_pages': paginator.num_pages,  # Посчитаем сколько всего страниц
             'total': paginator.count  # Посчитаем сколько всего запписей
         }
