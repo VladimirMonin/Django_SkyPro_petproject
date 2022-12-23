@@ -1,12 +1,12 @@
-from rest_framework import serializers
+from rest_framework import serializers  # импорт подтягивается плохо - можно делать вручную
+
+from vacancies.models import Vacancy
 
 
-class VacancySerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    text = serializers.CharField(max_length=2000)
-    slug = serializers.CharField(max_length=50)
-    status = serializers.CharField(max_length=6)
-    created = serializers.DateField()
-    username = serializers.CharField(max_length=100)
+class VacancySerializer(serializers.ModelSerializer):
+    username = serializers.CharField()  # username в модели нет - но мы можем добавить в сериализатор (а данные добавляются во вьюшке)
+    class Meta:
+        model = Vacancy  # Модель которую будем прогонять
+        fields = ['id', 'text', 'slug', 'status', 'created', 'username']  # Поля (тут можно сделать исключения, или просто указать __all__
 
 
