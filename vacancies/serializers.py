@@ -32,6 +32,7 @@ class VacancyDetailSerializer(serializers.ModelSerializer):
 
 
 class VacancyCreateSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)  # Добавили поле ID (объявления) - т.к. оно не передается при создании - указали что required=False
     class Meta:
         model = Vacancy
-        exclude = ['id', 'skills']  # Исключили эти поля - они не идут на вход при создании вакансии
+        exclude = ['skills']  # Исключили эти поля - они не идут на вход при создании вакансии
