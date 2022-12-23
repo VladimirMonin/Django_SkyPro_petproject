@@ -47,3 +47,4 @@ virtualenv==20.16.5
 virtualenv-clone==0.5.7
 webencodings==0.5.1
 pillow==9.3.0
+djangorestframework==3.14.0
