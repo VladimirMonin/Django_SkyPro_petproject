@@ -65,7 +65,7 @@ class VacancyDetailView(DetailView):  # Специализированный к�
     def get(self, request, *args, **kwargs):
         vacancy = self.get_object()  # Встроенный метод который вернет наш элемент
 
-        return JsonResponse(VacancyDetailSerializer(vacancy).data, safe=False)
+        return JsonResponse(VacancyDetailSerializer(vacancy).data)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
