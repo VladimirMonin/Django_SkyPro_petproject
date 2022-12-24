@@ -43,6 +43,16 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
         model = Vacancy
         fields = '__all__'  # Исключили эти поля - они не идут на вход при создании вакансии
 
-    def is_valid(self, raise_exeption=False):
+    def is_valid(self, raise_exception=False):
         self._skills = self.initial_data.pop('skills')
-        return super().is_valid(raise_exeption=raise_exeption)
+        return super().is_valid(raise_exception=raise_exception)
+
+    def create(self, validated_data):
+        vacancy = Vacancy.objects.create(**validated_data)
+
+        for skill in self._skills:
+            skill_object, _ = Skill.objects.get_or_create(name=skill)
+            vacancy.skills.add(skill_object)
+
+        vacancy.save()
+        return vacancy
