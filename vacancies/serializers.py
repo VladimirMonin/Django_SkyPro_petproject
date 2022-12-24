@@ -33,7 +33,7 @@ class VacancyDetailSerializer(serializers.ModelSerializer):
 
 class VacancyCreateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)  # Добавили поле ID (объявления) - т.к. оно не передается при создании - указали что required=False
-    skills = serializers.SlugRelatedField(
+    skills = serializers.SlugRelatedField(  # Показали что работаем и со скилами
         required=False,
         many=True,
         queryset=Skill.objects.all(),  # Когда мы перестаем использовать только для чтения - нужно давать queryset
@@ -43,13 +43,16 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
         model = Vacancy
         fields = '__all__'  # Исключили эти поля - они не идут на вход при создании вакансии
 
+    # Когда мы передадим скилл которого нет в базе, проверка попытается достать это
+    # В квери сете, и упадет. Чтобы этого не случилось прячим их от валидатора чтобы пройтись по ним самим
     def is_valid(self, raise_exception=False):
-        self._skills = self.initial_data.pop('skills')
-        return super().is_valid(raise_exception=raise_exception)
+        self._skills = self.initial_data.pop('skills')  # Вытащили по ключу skills всё что прислал юзер
+        return super().is_valid(raise_exception=raise_exception)  # Вернули поведение "по умолчанию"
 
+    # Переопределяем метод create - он принимает валидированные данные
     def create(self, validated_data):
         vacancy = Vacancy.objects.create(**validated_data)
-
+        # Проходимся самостоятельно по скиллам - вытаскиваем или создаем
         for skill in self._skills:
             skill_object, _ = Skill.objects.get_or_create(name=skill)
             vacancy.skills.add(skill_object)
