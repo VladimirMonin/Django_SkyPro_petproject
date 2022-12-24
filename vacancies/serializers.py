@@ -5,7 +5,8 @@ from vacancies.models import Vacancy, Skill
 
 class VacancySerializer(serializers.ModelSerializer):
     #  тут мы можем как добавить новое поле, так и переопределить поле модели
-    username = serializers.CharField()  # username в модели нет - но мы можем добавить в сериализатор (а данные добавляются во вьюшке)
+    username = serializers.CharField()  # username в модели нет - но мы можем добавить в сериализатор (а данные
+    # добавляются во вьюшке)
     skills = serializers.SlugRelatedField(
         many=True,
         read_only=True,
@@ -32,13 +33,16 @@ class VacancyDetailSerializer(serializers.ModelSerializer):
 
 
 class VacancyCreateSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False)  # Добавили поле ID (объявления) - т.к. оно не передается при создании - указали что required=False
+    id = serializers.IntegerField(
+        required=False)  # Добавили поле ID (объявления) - т.к. оно не передается при создании - указали что
+    # required=False
     skills = serializers.SlugRelatedField(  # Показали что работаем и со скилами
         required=False,
         many=True,
         queryset=Skill.objects.all(),  # Когда мы перестаем использовать только для чтения - нужно давать queryset
         slug_field='name'
     )
+
     class Meta:
         model = Vacancy
         fields = '__all__'  # Исключили эти поля - они не идут на вход при создании вакансии
