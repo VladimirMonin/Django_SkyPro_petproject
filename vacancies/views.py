@@ -9,11 +9,12 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
-from vacancies.serializers import VacancySerializer, VacancyDetailSerializer, VacancyCreateSerializer
+from vacancies.serializers import VacancySerializer, VacancyDetailSerializer, VacancyCreateSerializer, \
+    VacancyUpdateSerializer
 
 
 def hello(request):
@@ -31,69 +32,13 @@ class VacancyDetailView(RetrieveAPIView):  # Специализированны�
     serializer_class = VacancyDetailSerializer
 
 
-
 class VacancyCreateView(CreateAPIView):  # Тут не нужен csrf_exempt - т.к. оно заточено под работу как API
     queryset = Vacancy.objects.all()
     serializer_class = VacancyCreateSerializer
-    # model = Vacancy
-    # fields = ['user', 'status', 'created', 'slug', 'skills',
-    #           'text']  # Нужно для генерации формы. Её мы не будем использовать. Но т.к. это неотъемлимый атрибут джанго - приходится писать
-    #
-    # def post(self, request, *args, **kwargs):
-    #     vacancy_data = VacancyCreateSerializer(data=json.loads(request.body)) # Из тела запроса в json - потом в объект Python
-    #     if vacancy_data.is_valid():  # Проверяем что все данные в нужных форматах и подходят
-    #         vacancy_data.save()  # Прямо из сериализатора сохраняем
-    #
-    #     else:
-    #         return JsonResponse(vacancy_data.errors)
-    #
-    #     return JsonResponse(
-    #         vacancy_data.data,
-    #         safe=False, json_dumps_params={'ensure_ascii': False}
-    #     )
-    #
 
-@method_decorator(csrf_exempt, name='dispatch')
-class VacancyUpdateView(UpdateView):
-    model = Vacancy
-    fields = ['status', 'slug', 'skills',
-              'text']  # Копия с CreateView, но тут мы не будем редактировать пользователя и дату создания
-
-    def patch(self, request, *args, **kwargs):
-        super().post(request, *args, **kwargs)
-
-        vacancy_data = json.loads(
-            request.body)  # Вытаскиваем данные для сохранения из тела запроса POST и приводим в вид словаря для дальнейшей работы
-
-        self.object.slug = vacancy_data['slug']
-        self.object.status = vacancy_data['status']
-        self.object.text = vacancy_data['text']
-
-        for skill in vacancy_data['skills']:
-            try:
-                skill_obj = Skill.objects.get(name=skill)
-            except Skill.DoesNotExist:
-                return JsonResponse({"error": "Skill not found"}, status=404)
-            self.object.skills.add(skill_obj)
-
-        self.object.save()  # Тут он не сохраняется автоматом - поэтому делаем это вручную
-
-        return JsonResponse(
-            {
-                'id': self.object.id,
-                'text': self.object.text,
-                'slug': self.object.slug,
-                'status': self.object.status,
-                'created': self.object.created,
-                'skills': list(self.object.skills.all().values_list("name", flat=True)),
-                # это many to many поле которое ссылается на таблицу
-                # с ключами, просто так не выведешь. Мы делаем запрос в БД. Без этого никак. Берем скиллы, достаем все
-                # говорим что нам надо достать тоьлко имена (в плоском виде) и заворачиваем в список
-
-            }
-            , json_dumps_params={'ensure_ascii': False}
-        )
-
+class VacancyUpdateView(UpdateAPIView):
+    queryset = Vacancy.objects.all()
+    serializer_class = VacancyUpdateSerializer
 
 @method_decorator(csrf_exempt, name='dispatch')
 class VacancyDeleteView(DeleteView):
