@@ -67,6 +67,8 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
 
 class VacancyUpdateSerializer(VacancyCreateSerializer):
     id = serializers.IntegerField(required=True)
+    created = serializers.DateField(read_only=True)
+    user = serializers.CharField(read_only=True)
 
     def save(self):
         vacancy = super().save()
