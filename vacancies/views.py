@@ -9,12 +9,12 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
 from vacancies.serializers import VacancySerializer, VacancyDetailSerializer, VacancyCreateSerializer, \
-    VacancyUpdateSerializer
+    VacancyUpdateSerializer, VacancyDestroySerializer
 
 
 def hello(request):
@@ -36,19 +36,15 @@ class VacancyCreateView(CreateAPIView):  # Тут не нужен csrf_exempt - 
     queryset = Vacancy.objects.all()
     serializer_class = VacancyCreateSerializer
 
+
 class VacancyUpdateView(UpdateAPIView):
     queryset = Vacancy.objects.all()
     serializer_class = VacancyUpdateSerializer
 
-@method_decorator(csrf_exempt, name='dispatch')
-class VacancyDeleteView(DeleteView):
-    model = Vacancy
-    success_url = '/'
 
-    def delete(self, request, *args, **kwargs):
-        super().delete(request, *args, **kwargs)
-
-        return JsonResponse({"status": "ok"}, status=200)
+class VacancyDeleteView(DestroyAPIView):
+    queryset = Vacancy.objects.all()
+    serializer_class = VacancyDestroySerializer
 
 
 @method_decorator(csrf_exempt, name='dispatch')
