@@ -63,3 +63,17 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
 
         vacancy.save()
         return vacancy
+
+
+class VacancyUpdateSerializer(VacancyCreateSerializer):
+    id = serializers.IntegerField(required=True)
+
+    def save(self):
+        vacancy = super().save()
+        for skill in self._skills:
+            skill_object, _ = Skill.objects.get_or_create(name=skill)
+            vacancy.skills.add(skill_object)
+
+        vacancy.save()
+        return vacancy
+
