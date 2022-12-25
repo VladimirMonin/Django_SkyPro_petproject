@@ -65,7 +65,8 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
         return vacancy
 
 
-class VacancyUpdateSerializer(VacancyCreateSerializer): #TODO важный момент - ограничить перезапись IP
+class VacancyUpdateSerializer(VacancyCreateSerializer):  # важный момент - ограничить перезапись IP
+    id = serializers.IntegerField(read_only=True)
     created = serializers.DateField(read_only=True)
     user = serializers.CharField(read_only=True)
 
