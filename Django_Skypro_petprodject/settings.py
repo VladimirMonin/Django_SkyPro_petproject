@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-%(bhx&u#s-_6$(bv53==z_mea%i$iy+1^502a+*&vf%cfhen9h
 DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', '45.142.211.30']  # адрес сервера на котором будет разворачиваться приложение
-
 
 # Application definition
 
@@ -40,7 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',  # DRF надо добавить ДО самописных приложений
     'vacancies',  # Добавили app vacancies в настройки
     'companies',
-    ]
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -72,7 +70,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Django_Skypro_petprodject.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -82,12 +79,12 @@ DATABASES = {
         'NAME': 'postgres',  # Указали название БД
         'USER': 'postgres',  # Указали юзера БД
         'PASSWORD': 'postgres',  # Указали юзера БД
-        'HOST': 'postgres',  # # Указали хост тут может быть IP или УРЛ. Я указал DNS имя контейнера с постгрой в сети докера
+        'HOST': 'postgres',
+        # # Указали хост тут может быть IP или УРЛ. Я указал DNS имя контейнера с постгрой в сети докера
         'PORT': '5432',  # Указали порт
 
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -107,7 +104,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -118,7 +114,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -131,10 +126,16 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'  # Путь относительно нашего сайта - по которому мы будем отдавать все наши картинки
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # То где все файлы которые загружают юзеры. Берем корневую директорию (соединяем пути для нашей ОС)
+MEDIA_ROOT = os.path.join(BASE_DIR,
+                          'media')  # То где все файлы которые загружают юзеры. Берем корневую директорию (соединяем пути для нашей ОС)
 
 TOTAL_ON_PAGE = 10  # константа для пагинации
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
+
+}
 # LOGGING = {
 #     'version': 1,
 #     'handlers': {
