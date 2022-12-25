@@ -12,7 +12,7 @@ router.register(r'skill', views.SkillsViewSet)
 urlpatterns = [
 
     path('', include(router.urls)),  # Подключаем роут
-    path('list/', views.VacancyListView.as_view()),  # специальный метод as.view() делает вызываемым класс (с передачей реквеста внутрь и упрощая задачу)
+    path('', views.VacancyListView.as_view()),  # специальный метод as.view() делает вызываемым класс (с передачей реквеста внутрь и упрощая задачу)
     path('detail/<int:pk>/', views.VacancyDetailView.as_view()),  # тут передается либо pk либо slug
     path('create/', views.VacancyCreateView.as_view()),
     path('update/<int:pk>/', views.VacancyUpdateView.as_view()),

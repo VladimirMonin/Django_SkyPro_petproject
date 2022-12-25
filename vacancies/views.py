@@ -32,6 +32,13 @@ class VacancyListView(ListAPIView):
     queryset = Vacancy.objects.all()  # это вместо указания модели
     serializer_class = VacancySerializer
 
+    def get(self, request, *args, **kwargs):
+        vacancy_text = request.GET.get('text', None)
+        if vacancy_text:
+            self.queryset = self.queryset.filter(text__icontains=vacancy_text)  # icontains - без учета регистра, contains с учетом
+
+        return super().get(request, *args, **kwargs)
+
 
 class VacancyDetailView(RetrieveAPIView):  # Специализированный класс для детального отображения любого элемента
     queryset = Vacancy.objects.all()
