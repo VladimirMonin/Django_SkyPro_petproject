@@ -9,19 +9,25 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from rest_framework import viewsets
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.viewsets import ModelViewSet
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
 from vacancies.serializers import VacancySerializer, VacancyDetailSerializer, VacancyCreateSerializer, \
-    VacancyUpdateSerializer, VacancyDestroySerializer
+    VacancyUpdateSerializer, VacancyDestroySerializer, SkillSerializer
 
 
 def hello(request):
     return HttpResponse('Это pet prodject для изучения Django в SkyPro')
 
 
-@method_decorator(csrf_exempt, name='dispatch')  # Таким образом мы можем обвернуть целый класс в декоратор csrf_exempt
+class SkillsViewSet(viewsets.ModelViewSet):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+
+
 class VacancyListView(ListAPIView):
     queryset = Vacancy.objects.all()  # это вместо указания модели
     serializer_class = VacancySerializer

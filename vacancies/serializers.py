@@ -3,6 +3,12 @@ from rest_framework import serializers  # импорт подтягиваетс�
 from vacancies.models import Vacancy, Skill
 
 
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = '__all__'
+
+
 class VacancySerializer(serializers.ModelSerializer):
     #  тут мы можем как добавить новое поле, так и переопределить поле модели
     username = serializers.CharField()  # username в модели нет - но мы можем добавить в сериализатор (а данные
