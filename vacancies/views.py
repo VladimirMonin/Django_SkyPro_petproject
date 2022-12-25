@@ -35,8 +35,15 @@ class VacancyListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         vacancy_text = request.GET.get('text', None)
         if vacancy_text:
-            self.queryset = self.queryset.filter(text__icontains=vacancy_text)  # icontains - без учета регистра, contains с учетом
+            self.queryset = self.queryset.filter(
+                text__icontains=vacancy_text
+            )  # icontains - без учета регистра, contains с учетом
 
+        skill_name = request.GET.get('skill', None)
+        if skill_name:
+            self.queryset = self.queryset.filter(
+                skills__name__icontains=skill_name  # название поля в модели вакансия - название поля в таблице скиллов
+            )  # так можно вкладывать до бесконечности указав все связки таблиц.
         return super().get(request, *args, **kwargs)
 
 
