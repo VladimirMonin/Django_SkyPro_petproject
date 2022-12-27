@@ -18,7 +18,7 @@ urlpatterns = [
     path('update/<int:pk>/', views.VacancyUpdateView.as_view()),
     path('by_users/', views.UserVacancyDetailView.as_view()),
     path('delete/<int:pk>/', views.VacancyDeleteView.as_view()),
-    path('/like/', views.VacancyLikeView.as_view()),
+    path('like/', views.VacancyLikeView.as_view()),
 
 ]
 

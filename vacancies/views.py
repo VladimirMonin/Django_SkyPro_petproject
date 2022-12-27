@@ -111,7 +111,7 @@ class VacancyLikeView(UpdateAPIView):
     serializer_class = VacancyDetailSerializer
 
     def put(self, request, *args, **kwargs):
-        Vacancy.objects.filter(pk__in=request.data).update(like=F('likes') + 1)
+        Vacancy.objects.filter(pk__in=request.data).update(likes=F('likes') + 1)
 
         return JsonResponse(
                     VacancyDetailSerializer(Vacancy.objects.filter(pk__in=request.data),
