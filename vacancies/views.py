@@ -37,7 +37,7 @@ class VacancyListView(ListAPIView):
         if vacancy_text:
             self.queryset = self.queryset.filter(
                 text__icontains=vacancy_text
-            )  # icontains - без учета регистра, contains с учетом
+            )  # ПОИСК ПО ВХОЖДЕНИЮ icontains - без учета регистра, contains с учетом
 
         skill_name = request.GET.get('skill', None)
         if skill_name:
