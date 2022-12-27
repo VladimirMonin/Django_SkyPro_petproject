@@ -111,7 +111,11 @@ class VacancyLikeView(UpdateAPIView):
     serializer_class = VacancyDetailSerializer
 
     def put(self, request, *args, **kwargs):
-        Vacancy.objects.filter(pk__in=request.data).update(likes=F('likes') + 1)
+        Vacancy.objects.filter(pk__in=request.data).update(likes=F('likes') + 1)  # Взяли модель вакансии,
+        # Отфильтровали по первичным ключам. PK входит в список - а список берем из данных которые пришли. Сразу на
+        # эту штуку применим update. Методы можно вешать до бесконечности или до первого терминального метода.
+        # Обновляем поле likes. Делается это с помощью класса F - он говорит что это поле текущей записи. Возьми
+        # текущее значение и сделай с ним всякое
 
         return JsonResponse(
                     VacancyDetailSerializer(Vacancy.objects.filter(pk__in=request.data),
