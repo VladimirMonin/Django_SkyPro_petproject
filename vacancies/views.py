@@ -2,7 +2,7 @@ import json
 
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -39,11 +39,19 @@ class VacancyListView(ListAPIView):
                 text__icontains=vacancy_text
             )  # ПОИСК ПО ВХОЖДЕНИЮ icontains - без учета регистра, contains с учетом
 
-        skill_name = request.GET.get('skill', None)
-        if skill_name:
-            self.queryset = self.queryset.filter(
-                skills__name__icontains=skill_name  # название поля в модели вакансия - название поля в таблице скиллов
-            )  # так можно вкладывать до бесконечности указав все связки таблиц.
+        # Делаем поиск по вхождению хотя бы одного навыка, а передаем список навыков в поисковый запрос
+        skills = request.GET.getlist('skill', None)  # GET - словареподобная структура. И этим методом мы берем список
+        skills_q = None
+
+        for skill in skills:
+            if skills_q is None:
+                skills_q = Q(skills__name__icontains=skill)  # Специальный класс для сбора условий фильтрации
+            else:
+                skills_q |= Q(skills__name__icontains=skill)  # Его можно соединять при помощи логических конструкций
+            #  Так делается любая логическая операция (кроме И - оно по умолчанию)
+        if skills_q:
+            self.queryset = self.queryset.filter(skills_q)
+
         return super().get(request, *args, **kwargs)
 
 
