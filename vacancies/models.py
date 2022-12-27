@@ -38,6 +38,7 @@ class Vacancy(models.Model):
     skills = models.ManyToManyField(
         Skill)  # Добавили связь МНОГИЕ КО МНОГИМ. Джанго сделает всё сам. Кстати, это не поле а связь
 
+    likes = models.IntegerField(default=0)
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
