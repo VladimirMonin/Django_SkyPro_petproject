@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'rest_framework',  # DRF надо добавить ДО самописных приложений
     'vacancies',  # Добавили app vacancies в настройки
     'companies',
+    'authentication',
+
 ]
 
 MIDDLEWARE = [
