@@ -118,7 +118,7 @@ class VacancyLikeView(UpdateAPIView):
         # текущее значение и сделай с ним всякое
 
         return JsonResponse(
-                    VacancyDetailSerializer(Vacancy.objects.filter(pk__in=request.data),
-                    many=True).data,
-                    safe=False,
+            VacancyDetailSerializer(Vacancy.objects.filter(pk__in=request.data),
+                                    many=True).data,
+                                    safe=False,
         )
