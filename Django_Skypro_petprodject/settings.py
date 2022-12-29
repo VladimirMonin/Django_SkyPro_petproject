@@ -140,6 +140,7 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'authentication.User'  # Мы говорим где лежит пользователь Джанго - app и название модели
+
 # LOGGING = {
 #     'version': 1,
 #     'handlers': {
