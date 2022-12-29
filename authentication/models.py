@@ -1,12 +1,12 @@
 from random import choices
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Profile(models.Model): # Создали доп. таблицу. Ссылкается на пользователя. На 1 запись пользователя - 1 профиль
+class User(AbstractUser):  # Наследуемся от абстракции у которой нет таблицы (как у User) - значит будет создана
+    # чистая таблица, не будет лишних запросов в базу и не надо помнить про связку один к одному
     MALE = 'm'
     FEMALE = 'f'
     SEX = [(MALE, 'Male'), (FEMALE, 'Female')]
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     sex = models.CharField(max_length=1, choices=SEX, default=MALE)

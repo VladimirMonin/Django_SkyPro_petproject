@@ -33,9 +33,6 @@ services:
        ports:
            - '8000:8000'
 
-
-
-
 volumes:
   pg_data_pet_project:
 
