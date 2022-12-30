@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',  # DRF надо добавить ДО самописных приложений
     'rest_framework.authtoken',  # Библиотека встроена в rest_framework - тут мы просто её включаем. Позволяет делать
-    # аутинтефикацию по токену. После подключения надо сделать миграции
+    # аутинтефикацию по токену. У неё есть миграции - поэтому нужно сделать migrate
     'vacancies',  # Добавили app vacancies в настройки
     'companies',
     'authentication',
@@ -139,6 +139,9 @@ TOTAL_ON_PAGE = 10  # константа для пагинации
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # Через какие классы можно проверять аутентификацию
+    ],
 
 }
 
