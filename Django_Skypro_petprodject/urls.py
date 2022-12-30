@@ -11,6 +11,7 @@ urlpatterns = [
     path('hello/', views.hello),  # comments: Показали что будет работать по этому адресу
     path('vacancy/', include('vacancies.urls')),  # добавили урлы из app vacancies
     path('company/', include('companies.urls')),
+    path('user/', include('authentication.urls')),
 ]
 
 if settings.DEBUG:
