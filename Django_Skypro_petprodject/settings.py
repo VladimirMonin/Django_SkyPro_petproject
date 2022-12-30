@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  # DRF надо добавить ДО самописных приложений
+    'rest_framework.authtoken',  # Библиотека встроена в rest_framework - тут мы просто её включаем. Позволяет делать
+    # аутинтефикацию по токену. После подключения надо сделать миграции
     'vacancies',  # Добавили app vacancies в настройки
     'companies',
     'authentication',
@@ -129,7 +131,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'  # Путь относительно нашего сайта - по которому мы будем отдавать все наши картинки
 MEDIA_ROOT = os.path.join(BASE_DIR,
-                          'media')  # То где все файлы которые загружают юзеры. Берем корневую директорию (соединяем пути для нашей ОС)
+                          'media')  # То где все файлы которые загружают юзеры. Берем корневую директорию (соединяем
+# пути для нашей ОС)
 
 TOTAL_ON_PAGE = 10  # константа для пагинации
 
@@ -139,7 +142,7 @@ REST_FRAMEWORK = {
 
 }
 
-AUTH_USER_MODEL = 'authentication.User'  # Мы говорим где лежит пользователь Джанго - app и название модели
+AUTH_USER_MODEL = 'authentication.User'  # Мы говорим, где лежит пользователь Джанго - app и название модели
 
 
 # LOGGING = {
