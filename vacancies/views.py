@@ -16,6 +16,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from Django_Skypro_petprodject import settings
 from vacancies.models import Vacancy, Skill
+from vacancies.permissions import VacancyCreatePermission
 from vacancies.serializers import VacancySerializer, VacancyDetailSerializer, VacancyCreateSerializer, \
     VacancyUpdateSerializer, VacancyDestroySerializer, SkillSerializer
 
@@ -65,6 +66,7 @@ class VacancyDetailView(RetrieveAPIView):  # Специализированны�
 class VacancyCreateView(CreateAPIView):  # Тут не нужен csrf_exempt - т.к. оно заточено под работу как API
     queryset = Vacancy.objects.all()
     serializer_class = VacancyCreateSerializer
+    permission_classes = VacancyCreatePermission
 
 
 class VacancyUpdateView(UpdateAPIView):
