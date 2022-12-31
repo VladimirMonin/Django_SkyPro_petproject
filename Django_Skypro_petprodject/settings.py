@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',  # DRF надо добавить ДО самописных приложений
     'rest_framework.authtoken',  # Библиотека встроена в rest_framework - тут мы просто её включаем. Позволяет делать
     # аутинтефикацию по токену. У неё есть миграции - поэтому нужно сделать migrate
+    'rest_framework_simplejwt',
     'vacancies',  # Добавили app vacancies в настройки
     'companies',
     'authentication',
