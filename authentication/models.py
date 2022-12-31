@@ -9,4 +9,11 @@ class User(AbstractUser):  # Наследуемся от абстракции у
     MALE = 'm'
     FEMALE = 'f'
     SEX = [(MALE, 'Male'), (FEMALE, 'Female')]
+
+    HR = 'hr'
+    EMPLOYEE = 'emp'
+    UNKNOWN = 'unk'
+    ROLE = [(HR, 'HR'), (UNKNOWN, 'Unknown'), (EMPLOYEE, 'Employee')]
+
     sex = models.CharField(max_length=1, choices=SEX, default=MALE)
+    role = models.CharField(max_length=4, choices=ROLE, default=UNKNOWN)
