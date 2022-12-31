@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from Django_Skypro_petprodject import settings
@@ -58,6 +59,7 @@ class VacancyListView(ListAPIView):
 class VacancyDetailView(RetrieveAPIView):  # Специализированный класс для детального отображения любого элемента
     queryset = Vacancy.objects.all()
     serializer_class = VacancyDetailSerializer
+    permission_classes = [IsAuthenticated]  # Список с доступами - этот проверяет что есть доступ на эту страницу
 
 
 class VacancyCreateView(CreateAPIView):  # Тут не нужен csrf_exempt - т.к. оно заточено под работу как API
