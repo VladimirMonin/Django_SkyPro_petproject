@@ -56,7 +56,7 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
     # Когда мы передадим скилл которого нет в базе, проверка попытается достать это
     # В квери сете, и упадет. Чтобы этого не случилось прячем их от валидатора, чтобы пройтись по ним самим
     def is_valid(self, raise_exception=False):
-        self._skills = self.initial_data.pop('skills')  # Вытащили по ключу skills всё что прислал юзер
+        self._skills = self.initial_data.pop('skills', [])  # Вытащили по ключу skills всё что прислал юзер
         return super().is_valid(raise_exception=raise_exception)  # Вернули поведение "по умолчанию"
 
     # Переопределяем метод create - он принимает валидированные данные

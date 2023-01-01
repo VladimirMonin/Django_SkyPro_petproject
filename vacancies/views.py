@@ -66,7 +66,7 @@ class VacancyDetailView(RetrieveAPIView):  # Специализированны�
 class VacancyCreateView(CreateAPIView):  # Тут не нужен csrf_exempt - т.к. оно заточено под работу как API
     queryset = Vacancy.objects.all()
     serializer_class = VacancyCreateSerializer
-    permission_classes = VacancyCreatePermission
+    permission_classes = [VacancyCreatePermission]  # Этот параметр передается списком - это важно!
 
 
 class VacancyUpdateView(UpdateAPIView):

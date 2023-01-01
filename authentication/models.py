@@ -8,12 +8,12 @@ class User(AbstractUser):  # Наследуемся от абстракции у
     # чистая таблица, не будет лишних запросов в базу и не надо помнить про связку один к одному
     MALE = 'm'
     FEMALE = 'f'
-    SEX = [(MALE, 'Male'), (FEMALE, 'Female')]
+    SEX = [(MALE, 'Мужской'), (FEMALE, 'Женский')]
 
     HR = 'hr'
     EMPLOYEE = 'emp'
     UNKNOWN = 'unk'
-    ROLE = [(HR, HR), (UNKNOWN, HR), (EMPLOYEE, HR)]
+    ROLE = [(HR, HR), (UNKNOWN, 'Неизвестный'), (EMPLOYEE, 'Сотрудник')]
 
     sex = models.CharField(max_length=1, choices=SEX, default=MALE)
     role = models.CharField(max_length=4, choices=ROLE, default=UNKNOWN)
