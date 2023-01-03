@@ -41,7 +41,9 @@ class Vacancy(models.Model):
         Skill)  # Добавили связь МНОГИЕ КО МНОГИМ. Джанго сделает всё сам. Кстати, это не поле а связь
 
     likes = models.IntegerField(default=0)
-    min_experience = models.IntegerField(null=True, validators=[MinValueValidator(0)]) # null - для того, чтобы не постарадали имеющиеся данные, валидатор не позволит указать отрицательный опыт
+    min_experience = models.IntegerField(null=True, validators=[MinValueValidator(0)])  # null - для того, чтобы не
+
+    # постарадали имеющиеся данные, валидатор не позволит указать отрицательный опыт
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
@@ -50,7 +52,7 @@ class Vacancy(models.Model):
     def __str__(self):
         return self.text  # То что будет отображаться в заголовках админки
 
-#  Добавляем username через модель. Будет его возвращать, иначе None
+    #  Добавляем username через модель. Будет его возвращать, иначе None
     @property  # чтобы сделать его атрибутом модели
     def username(self):
         return self.user.username if self.user else None
