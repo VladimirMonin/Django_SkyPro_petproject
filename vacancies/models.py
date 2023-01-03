@@ -1,4 +1,4 @@
-
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from authentication.models import User
@@ -41,6 +41,7 @@ class Vacancy(models.Model):
         Skill)  # Добавили связь МНОГИЕ КО МНОГИМ. Джанго сделает всё сам. Кстати, это не поле а связь
 
     likes = models.IntegerField(default=0)
+    min_experience = models.IntegerField(null=True, validators=[MinValueValidator(0)]) # null - для того, чтобы не постарадали имеющиеся данные, валидатор не позволит указать отрицательный опыт
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
