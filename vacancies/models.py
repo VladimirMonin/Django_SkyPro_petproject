@@ -42,7 +42,6 @@ class Vacancy(models.Model):
 
     likes = models.IntegerField(default=0)
     min_experience = models.IntegerField(null=True, validators=[MinValueValidator(0)])  # null - для того, чтобы не
-
     # постарадали имеющиеся данные, валидатор не позволит указать отрицательный опыт
     class Meta:
         verbose_name = 'Вакансия'

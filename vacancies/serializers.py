@@ -21,8 +21,7 @@ class VacancySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vacancy  # Модель, которую будем прогонять
-        fields = ['id', 'text', 'slug', 'status', 'created',
-                  'username', 'skills']  # Поля (тут можно сделать исключения, или просто указать __all__
+        fields = '__all__'  # Поля (тут можно сделать исключения, или просто указать __all__
 
 
 class VacancyDetailSerializer(serializers.ModelSerializer):
