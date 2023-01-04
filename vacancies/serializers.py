@@ -1,6 +1,18 @@
 from rest_framework import serializers  # импорт подтягивается плохо - можно делать вручную
+from rest_framework.validators import UniqueValidator
 
 from vacancies.models import Vacancy, Skill
+
+
+class NotInStatusValidator:
+    def __init__(self, statuses):
+        if not isinstance(statuses, list):
+            statuses = [statuses]
+        self.statuses = statuses
+
+    def __call__(self, value):
+        if value in self.statuses:
+            raise serializers.ValidationError('Incorrect status.')
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -47,7 +59,16 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
         queryset=Skill.objects.all(),  # Когда мы перестаем использовать только для чтения - нужно давать queryset
         slug_field='name'
     )
-
+    slug = serializers.CharField(
+        max_length=100,
+        validators=[UniqueValidator(queryset=Vacancy.objects.all(), lookup='contains')]
+        # Список классов. Эти валидаторы находятся в
+        # пакете DRF и называются немного иначе. По этому quryset валидатор определяет - как проверить это поле. Т.е.
+        # достанет все вакансии и среди них будет проверять на уникальность
+        # lookup - по умолчанию идет = - мы поменяли на вхождение. Т.е. уникальность по вхождению строки
+    )
+    # добавляем валидацию статуса, добавляемая вакансия не должна быть в статусе ЗАКРЫТО
+    status = serializers.CharField(max_length=8, validators=[NotInStatusValidator('closed')])
     class Meta:
         model = Vacancy
         fields = '__all__'  # Исключили эти поля - они не идут на вход при создании вакансии
