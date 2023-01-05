@@ -1,6 +1,5 @@
 import json
 
-
 from django.core.paginator import Paginator
 from django.db.models import Count, Avg, Q, F
 from django.http import HttpResponse, JsonResponse
@@ -9,6 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
@@ -36,6 +36,10 @@ class VacancyListView(ListAPIView):
     queryset = Vacancy.objects.all()  # это вместо указания модели
     serializer_class = VacancySerializer
 
+    @extend_schema(
+        description="Retrive vacancy list",  # Описание в сваггере которое отображается при развороте
+        summary='Vacancy list'  # Краткое описание в сваггере
+    )
     def get(self, request, *args, **kwargs):
         vacancy_text = request.GET.get('text', None)
         if vacancy_text:
@@ -118,7 +122,9 @@ def user_vacancies(request):
 class VacancyLikeView(UpdateAPIView):
     queryset = Vacancy.objects.all()
     serializer_class = VacancyDetailSerializer
+    http_method_names = ['put']
 
+    @extend_schema(deprecated=True)  # Указываем что будем скоро избавлятся от этого метода - бегите, голубцы!
     def put(self, request, *args, **kwargs):
         Vacancy.objects.filter(pk__in=request.data).update(likes=F('likes') + 1)  # Взяли модель вакансии,
         # Отфильтровали по первичным ключам. PK входит в список - а список берем из данных которые пришли. Сразу на
