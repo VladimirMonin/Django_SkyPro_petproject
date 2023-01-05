@@ -1,31 +1,17 @@
 from datetime import date
-
 import pytest
 
-from vacancies.models import Vacancy
-
+from tests.factories import VacancyFactory
+from vacancies.serializers import VacancySerializer
 
 @pytest.mark.django_db  # Проверит все миграции. Создаст объект в базе а потом откатит её в исходное состояние!
-def test_vacancy_list(client, vacancy):
-
-
+def test_vacancy_list(client):
+    vacancies = VacancyFactory.create_batch(5)  # создаем список объектов вакансий
     expected_response = {
-        'count': 1,
+        'count': 5,
         'next': None,
         'previous': None,
-        'results': [{
-            "id": vacancy.pk,
-            "created": date.today().strftime('%Y-%m-%d'),
-            "skills": [],
-            'slug': 'test',
-            'text': 'test text',
-            'status': "draft",
-            "min_experience": None,
-            "likes": 0,
-            "updated_at": None,
-            "user": vacancy.user.pk,
-            "username": vacancy.user.username
-        }]
+        'results': VacancySerializer(vacancies, many=True).data  # Используем сериалайзер для проверки данных
     }
     response = client.get('/vacancy/')
 

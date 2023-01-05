@@ -8,7 +8,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
 
-    username = 'test'
+    username = factory.Faker('name')  # передаем сюда что надо сделать фейк имени
     password = 'testtest'
 
 
