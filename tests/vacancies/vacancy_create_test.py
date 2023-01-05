@@ -1,5 +1,6 @@
 # Create работает по позитивному сценарию. Потом проверка всех валидаторов
 from datetime import date
+
 import pytest
 
 
@@ -28,7 +29,7 @@ def test_create_vacancy(client, hr_token):
         "/vacancy/create/",
         data,
         content_type="application/json",
-        HTTP_AUTHORIZATION = "Token " + hr_token
+        HTTP_AUTHORIZATION="Token " + hr_token
     )
 
     assert response.status_code == 201
