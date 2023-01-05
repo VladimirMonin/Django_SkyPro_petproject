@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'vacancies',  # Добавили app vacancies в настройки
     'companies',
     'authentication',
+    'drf_spectacular',  # пакет для Open-api 3.0 документации
 
 ]
 
@@ -144,8 +145,17 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',  # Через какие классы можно проверять аутентификацию
         'rest_framework_simplejwt.authentication.JWTAuthentication'
 
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  # говорим DRF - что будет генерировать документацию
 
+}
+
+# Дополнительные настройки самой документации
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Django_SkyPro_petproject API',
+    'DESCRIPTION': 'My first DRF API project',
+    'VERSION': '1.0.0',
 }
 
 AUTH_USER_MODEL = 'authentication.User'  # Мы говорим, где лежит пользователь Джанго - app и название модели
