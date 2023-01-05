@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
@@ -27,6 +27,16 @@ def hello(request):
     return HttpResponse('Это pet prodject для изучения Django в SkyPro')
 
 
+@extend_schema_view(
+    list=extend_schema(
+        description='Retrieve skills list',
+        summary='Skill list'
+    ),
+    create=extend_schema(
+        description='Retrieve skills list',
+        summary='Skill list'
+    )
+)
 class SkillsViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
