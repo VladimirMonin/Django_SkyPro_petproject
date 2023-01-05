@@ -5,9 +5,9 @@ import pytest
 
 
 @pytest.mark.django_db
-def test_create_vacancy(client, hr_token, vacancy):
+def test_create_vacancy(client, hr_token):
     expected_response = {
-        "id": vacancy.pk,
+        "id": 6,
         "created": date.today().strftime('%Y-%m-%d'),
         "skills": [],
         "slug": "123",
